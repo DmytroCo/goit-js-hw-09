@@ -6,40 +6,47 @@ const formData = {
 const STORAGE_KEY = "feedback-form-state";
 
 const form = document.querySelector(".feedback-form");
-const input = document.querySelector('input');
+const input = form.querySelector('input');
 const textarea = form.querySelector("textarea");
 
-document.addEventListener('DOMContentLoaded', reloadFunction);
-function reloadFunction() {
-  const storageData = localStorage.getItem(localStorageKey);
+document.addEventListener('DOMContentLoaded', () => {
+  const storageData = localStorage.getItem(STORAGE_KEY);
+  
   if (storageData) {
-    const pageReboot = JSON.parse(storageData);
-    input.value = pageReboot.email;
-    textArea.value = pageReboot.message;
-    formData.email = pageReboot.email;
-    formData.message = pageReboot.message;
+    try {
+      const savedData = JSON.parse(storageData);
+      input.value = savedData.email || '';
+      textarea.value = savedData.message || '';
+      formData.email = savedData.email || '';
+      formData.message = savedData.message || '';
+    } catch (error) {
+      console.error("Error parsing localStorage data:", error);
+    }
   }
-}
+});
 
-form.addEventListener('input', inputFunction);
-function inputFunction() {
+form.addEventListener('input', () => {
   formData.email = input.value.trim();
-  formData.message = textArea.value.trim();
-  localStorage.setItem(localStorageKey, JSON.stringify(formData));
-}
+  formData.message = textarea.value.trim();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+});
 
-form.addEventListener('submit', submitFunction);
-function submitFunction(event) {
+form.addEventListener('submit', (event) => {
   event.preventDefault();
-  const emailValue = event.target.elements.email.value.trim();
-  const messageValue = event.target.elements.message.value.trim();
+
+  const emailValue = input.value.trim();
+  const messageValue = textarea.value.trim();
+
   if (!emailValue || !messageValue) {
     alert('Fill please all fields');
     return;
   }
+
   formData.email = emailValue;
   formData.message = messageValue;
+
   console.log(formData);
-  localStorage.removeItem(localStorageKey);
+
+  localStorage.removeItem(STORAGE_KEY);
   form.reset();
-}
+});
