@@ -1,4 +1,5 @@
 /* Gallery */
+
 .gallery {
   display: flex;
   flex-wrap: wrap;
@@ -21,6 +22,7 @@
 }
 
 /* Form */
+
 .body {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
