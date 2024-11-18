@@ -1,5 +1,3 @@
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const images = [
   {
@@ -67,25 +65,32 @@ const images = [
   },
 ];
 
-const gallery = document.querySelector(".gallery");
-const createMarkup = images.map((image) => `
-<li class="gallery-item">
-  <a class="gallery-link" href="${image.original}">
-    <img
-      class="gallery-image"
-      src="${image.preview}"
-      data-source="${image.original}"
-      alt="${image.description}"
-    />
-  </a>
-</li>
-`).join("");
+const gallery = document.querySelector('.gallery');
 
-gallery.insertAdjacentHTML("beforeend", createMarkup);
+const fragment = new DocumentFragment();
 
-const lightbox = new SimpleLightbox('.gallery a', {
-	captions: true,
-	captionsData: true,
-	captionPosition: 'bottom',
-	captionDelay: 250,
+for (const image of images) {
+  const liItem = document.createElement('li');
+  liItem.classList.add('gallery-item');
+  const link = document.createElement('a');
+  link.classList.add('gallery-link');
+  link.href = image.original;
+  liItem.append(link);
+  const picture = document.createElement('img');
+  picture.classList.add('gallery-image');
+  picture.src = image.preview;
+  picture.dataset.source = image.original;
+  picture.alt = image.description;
+  link.append(picture);
+  fragment.append(liItem);
+}
+
+gallery.append(fragment);
+
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+new SimpleLightbox('.gallery .gallery-link', {
+  captionsData: 'alt',
+  captionDelay: 250,
 });
