@@ -66,16 +66,17 @@ const images = [
 ];
 
 const gallery = document.querySelector('.gallery');
-
 const fragment = new DocumentFragment();
 
 for (const image of images) {
   const liItem = document.createElement('li');
   liItem.classList.add('gallery-item');
+    
   const link = document.createElement('a');
   link.classList.add('gallery-link');
   link.href = image.original;
   liItem.append(link);
+    
   const picture = document.createElement('img');
   picture.classList.add('gallery-image');
   picture.src = image.preview;
